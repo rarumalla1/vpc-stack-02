@@ -52,6 +52,90 @@
                 "CidrBlock": "10.0.1.150/28",
                 "MapPublicIpOnLaunch": "false"
             }
-        }
-    }
+        },
+        "PublicRouteTable": {
+           "Type": "AWS::EC2::RouteTable",
+           "Properties": {
+               "VpcId": {
+                   "Ref": "QuadVPC"
+               }
+           }
+
+       },
+       "PublicRoute": {
+           "Type": "AWS::EC2::Route",
+           "Properties": {
+               "RouteTableId": {
+                   "Ref": "PublicRouteTable"
+               },
+               "GatewayId": {
+                   "Ref": "InternetGateway"
+               },
+                "DestinationCidrBlock" : "0.0.0.0/0"
+           },
+
+           "DependsOn": [
+               "VPCGatewayAttachment"
+           ]
+       },
+
+       "SubnetRoutableTableAssociation": {
+           "Type": "AWS::EC2::SubnetRouteTableAssociation",
+           "Properties": {
+               "RouteTableId": {
+                   "Ref": "PublicRouteTable"
+               },
+               "SubnetId": {
+                   "Ref": "PublicSubnet"
+               }
+           },
+
+       }
+
+    },
+    "Outputs": {
+       "InternetGateway": {
+           "Description": "InternetGateway Id",
+           "Value": {
+               "Ref": "InternetGateway"
+           }
+       },
+       "VPCGatewayAttachment": {
+           "Description": "VPCGatewayAttachment Id",
+           "Value": {
+               "Ref": "VPCGatewayAttachment"
+           }
+       },
+       "QuadVPC": {
+           "Description": "QuadVPC Id",
+           "Value": {
+               "Ref": "QuadVPC"
+           }
+       },
+       "PublicSubnet": {
+           "Description": "PublicSubnet Id",
+           "Value": {
+               "Ref": "PublicSubnet"
+           }
+       },
+       "PrivateSubnet": {
+           "Description": "PrivateSubnet Id",
+           "Value": {
+               "Ref": "PrivateSubnet"
+           }
+       },
+       "PublicRouteTable": {
+           "Description": "PublicRouteTable Id",
+           "Value": {
+               "Ref": "PublicRouteTable"
+           }
+       },
+       "PublicRoute": {
+           "Description": "PublicRoute Id",
+           "Value": {
+               "Ref": "PublicRoute"
+           }
+       }
+
+   }
 }
